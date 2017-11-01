@@ -15,6 +15,7 @@
 <button id="record">Record</button>
 <button id="stop">Stop Record</button>
 <button id="play">Play</button>
+<button id="erase">Delete</button>
 
 <script type="text/paperscript" canvas="myCanvas">
 
@@ -22,6 +23,7 @@
 var record = document.getElementById("record");
 var stop = document.getElementById("stop");
 var play = document.getElementById("play");
+var erase = document.getElementById("delete");
 
 // initial global variables
 var shouldRecord;
@@ -234,6 +236,35 @@ function onFrame(event){
 	}
 }
 
+record.addEventListener("click", function() {
+	shouldRecord = true;
+	start = Date.now();
+});
+
+stop.addEventListener("click", function() {
+	shouldRecord = false;
+});
+
+play.addEventListener("click", function() {
+	playRecording();
+});
+
+function playRecording() {
+	var offset = 0;
+	var index = 0;
+
+	recordArray.forEach(function(element) {
+		
+		//console.log(element);
+		setTimeout(function(){
+			keyData[element].sound.play();
+
+		}, offset + recordTimes[index][element]);
+
+		offset += recordTimes[index][element];
+		index++;
+	});	
+}	
 
 </script>
 </body>
