@@ -191,6 +191,49 @@ var keyData = {
 	}
 };
 
+// runs on every key press
+function onKeyDown(event) {
+
+	// only for keyboard keys a-z
+	if (keyData[event.key]) {
+
+		// if user has pressed record button
+		if(shouldRecord) {
+
+			// record time between key presses and reset start
+			recordTimes[count] = {};
+			recordTimes[count][event.key] = Date.now() - start;
+			start = Date.now();
+
+			// save key push into the recordArray and increment the count for recordTimes
+			recordArray.push(event.key);
+			//console.log(recordArray);
+			//console.log(recordTimes);
+			count++;
+		}
+
+		// calculate max window size and define a new point within it
+		var maxPoint = new Point(view.size.width, view.size.height);
+		var randomPoint = Point.random();
+		var point = maxPoint * randomPoint;
+
+		// create a new circle at that point, assign its color and sound, and save into array
+		var newCircle = new Path.Circle(point, 500);
+		newCircle.fillColor = keyData[event.key].color;
+		keyData[event.key].sound.play();
+		circles.push(newCircle);
+	}
+}
+
+// runs on every frame
+function onFrame(event){
+	// loop through array, change colors and shrink circle until gone
+	for (var i = 0; i < circles.length; i++) {
+		circles[i].fillColor.hue += 1;
+		circles[i].scale(.9);
+	}
+}
+
 
 </script>
 </body>
