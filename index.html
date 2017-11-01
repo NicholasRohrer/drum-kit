@@ -3,6 +3,12 @@
 <head>
 	<title>Tie Bar Project</title>
 
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<!-- bootstap and jquery -->
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- paper.js and howler.js--> 
 	<script type="text/javascript" src="paper-full.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.js"></script>
@@ -11,11 +17,15 @@
 </head>
 <body>
 
+<div class="btn-group btn-group-justified">
+    <a href="#" class="btn btn-primary" id="record">RECORD</a>
+    <a href="#" class="btn btn-primary" id="stop">STOP</a>
+    <a href="#" class="btn btn-primary" id="play">PLAY</a>
+    <a href="#" class="btn btn-primary" id="erase">DELETE</a>
+  </div>
+</div>
+
 <canvas id="myCanvas" resize></canvas>
-<button id="record">Record</button>
-<button id="stop">Stop Record</button>
-<button id="play">Play</button>
-<button id="erase">Delete</button>
 
 <script type="text/paperscript" canvas="myCanvas">
 
@@ -32,6 +42,97 @@ var circles = [];
 var start;
 var recordTimes = {};
 var count = 0;
+
+// runs on every key press
+function onKeyDown(event) {
+
+	// only for keyboard keys a-z
+	if (keyData[event.key]) {
+
+		// if user has pressed record button
+		if(shouldRecord) {
+
+			// record time between key presses and reset start
+			recordTimes[count] = {};
+			recordTimes[count][event.key] = Date.now() - start;
+			start = Date.now();
+
+			// save key push into the recordArray and increment the count for recordTimes
+			recordArray.push(event.key);
+			//console.log(recordArray);
+			//console.log(recordTimes);
+			count++;
+		}
+
+		// calculate max window size and define a new point within it
+		var maxPoint = new Point(view.size.width, view.size.height);
+		var randomPoint = Point.random();
+		var point = maxPoint * randomPoint;
+
+		// create a new circle at that point, assign its color and sound, and save into array
+		var newCircle = new Path.Circle(point, 500);
+		newCircle.fillColor = keyData[event.key].color;
+		keyData[event.key].sound.play();
+		circles.push(newCircle);
+	}
+}
+
+// runs on every frame
+function onFrame(event){
+	// loop through array, change colors and shrink circle until gone
+	for (var i = 0; i < circles.length; i++) {
+		circles[i].fillColor.hue += 1;
+		circles[i].scale(.9);
+	}
+}
+
+// on click of record button
+record.addEventListener("click", function() {
+	shouldRecord = true;
+	start = Date.now();
+});
+
+// on click of stop button
+stop.addEventListener("click", function() {
+	shouldRecord = false;
+});
+
+// on click of play button
+play.addEventListener("click", function() {
+	playRecording();
+});
+
+// on click of delete button
+erase.addEventListener("click", function() {
+	deleteRecording();
+});
+
+// plays recording with exact timing of original input
+function playRecording() {
+	var offset = 0;
+	var index = 0;
+
+	// loop through each element of recordArray
+	recordArray.forEach(function(element) {
+		
+		// play each sound after recorded amount of time
+		//console.log(element);
+		setTimeout(function(){
+			keyData[element].sound.play();
+
+		}, offset + recordTimes[index][element]);
+
+		offset += recordTimes[index][element];
+		index++;
+	});	
+}
+
+// deletes recordArray and timing array
+function deleteRecording() {
+	recordArray = [];
+	recordTimes = {};
+	count = 0;
+}
 
 // keyboard sound mapping
 var keyData = {
@@ -191,90 +292,7 @@ var keyData = {
 			src: ['sounds/zig-zag.mp3']
 		})
 	}
-};
-
-// runs on every key press
-function onKeyDown(event) {
-
-	// only for keyboard keys a-z
-	if (keyData[event.key]) {
-
-		// if user has pressed record button
-		if(shouldRecord) {
-
-			// record time between key presses and reset start
-			recordTimes[count] = {};
-			recordTimes[count][event.key] = Date.now() - start;
-			start = Date.now();
-
-			// save key push into the recordArray and increment the count for recordTimes
-			recordArray.push(event.key);
-			//console.log(recordArray);
-			//console.log(recordTimes);
-			count++;
-		}
-
-		// calculate max window size and define a new point within it
-		var maxPoint = new Point(view.size.width, view.size.height);
-		var randomPoint = Point.random();
-		var point = maxPoint * randomPoint;
-
-		// create a new circle at that point, assign its color and sound, and save into array
-		var newCircle = new Path.Circle(point, 500);
-		newCircle.fillColor = keyData[event.key].color;
-		keyData[event.key].sound.play();
-		circles.push(newCircle);
-	}
-}
-
-// runs on every frame
-function onFrame(event){
-	// loop through array, change colors and shrink circle until gone
-	for (var i = 0; i < circles.length; i++) {
-		circles[i].fillColor.hue += 1;
-		circles[i].scale(.9);
-	}
-}
-
-record.addEventListener("click", function() {
-	shouldRecord = true;
-	start = Date.now();
-});
-
-stop.addEventListener("click", function() {
-	shouldRecord = false;
-});
-
-play.addEventListener("click", function() {
-	playRecording();
-});
-
-erase.addEventListener("click", function() {
-	deleteRecording();
-});
-
-function playRecording() {
-	var offset = 0;
-	var index = 0;
-
-	recordArray.forEach(function(element) {
-		
-		//console.log(element);
-		setTimeout(function(){
-			keyData[element].sound.play();
-
-		}, offset + recordTimes[index][element]);
-
-		offset += recordTimes[index][element];
-		index++;
-	});	
-}
-
-function deleteRecording() {
-	recordArray = [];
-	recordTimes = {};
-	count = 0;
-}	
+};	
 
 </script>
 </body>
