@@ -45,35 +45,20 @@ var count = 0;
 
 // runs on every key press
 function onKeyDown(event) {
-
 	// only for keyboard keys a-z
 	if (keyData[event.key]) {
-
 		// if user has pressed record button
 		if(shouldRecord) {
-
 			// record time between key presses and reset start
-			recordTimes[count] = {};
-			recordTimes[count][event.key] = Date.now() - start;
-			start = Date.now();
-
+			calculateTime();
 			// save key push into the recordArray and increment the count for recordTimes
 			recordArray.push(event.key);
-			//console.log(recordArray);
-			//console.log(recordTimes);
 			count++;
 		}
-
 		// calculate max window size and define a new point within it
-		var maxPoint = new Point(view.size.width, view.size.height);
-		var randomPoint = Point.random();
-		var point = maxPoint * randomPoint;
-
+		var point = calculatePoint();
 		// create a new circle at that point, assign its color and sound, and save into array
-		var newCircle = new Path.Circle(point, 500);
-		newCircle.fillColor = keyData[event.key].color;
-		keyData[event.key].sound.play();
-		circles.push(newCircle);
+		animateCircle(point);
 	}
 }
 
@@ -84,6 +69,25 @@ function onFrame(event){
 		circles[i].fillColor.hue += 1;
 		circles[i].scale(.9);
 	}
+}
+
+function calculateTime() {
+	recordTimes[count] = {};
+	recordTimes[count][event.key] = Date.now() - start;
+	start = Date.now();
+}
+
+function calculatePoint() {
+	var maxPoint = new Point(view.size.width, view.size.height);
+	var randomPoint = Point.random();
+	return maxPoint * randomPoint;
+}
+
+function animateCircle(point) {
+	var newCircle = new Path.Circle(point, 500);
+	newCircle.fillColor = keyData[event.key].color;
+	keyData[event.key].sound.play();
+	circles.push(newCircle);
 }
 
 // on click of record button
@@ -111,17 +115,12 @@ erase.addEventListener("click", function() {
 function playRecording() {
 	var offset = 0;
 	var index = 0;
-
-	// loop through each element of recordArray
+	// loop through each element of recordArray and play it
 	recordArray.forEach(function(element) {
-		
 		// play each sound after recorded amount of time
-		//console.log(element);
 		setTimeout(function(){
 			keyData[element].sound.play();
-
 		}, offset + recordTimes[index][element]);
-
 		offset += recordTimes[index][element];
 		index++;
 	});	
@@ -134,7 +133,7 @@ function deleteRecording() {
 	count = 0;
 }
 
-// keyboard sound mapping
+// keyboard sound and color mapping
 var keyData = {
 	q: {
 		color: "#f44242",
