@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tie Bar Project</title>
+
+	<!-- paper.js and howler.js--> 
+	<script type="text/javascript" src="paper-full.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.5/howler.js"></script>
+	<!-- link style sheet -->
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+
+<canvas id="myCanvas" resize></canvas>
+<button id="record">Record</button>
+<button id="stop">Stop Record</button>
+<button id="play">Play</button>
+
+<script type="text/paperscript" canvas="myCanvas">
+
+// recording buttons
+var record = document.getElementById("record");
+var stop = document.getElementById("stop");
+var play = document.getElementById("play");
+
+// initial global variables
+var shouldRecord;
+var recordArray = [];
+var circles = [];
+var start;
+var recordTimes = {};
+var count = 0;
+
+// keyboard sound mapping
+var keyData = {
+	q: {
+		color: "purple",
+		sound: new Howl({
+			src: ['sounds/bubbles.mp3']
+		})
+	},
+	w: {
+		color: "green",
+		sound: new Howl({
+			src: ['sounds/clay.mp3']
+		})
+	},
+	e: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	r: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	t: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	y: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	u: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	i: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	o: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	p: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	a: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	s: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	d: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	f: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	g: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	h: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	j: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	k: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	l: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	z: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	x: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	c: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	v: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	b: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	n: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	},
+	m: {
+		color: "yellow",
+		sound: new Howl({
+			src: ['sounds/confetti.mp3']
+		})
+	}
+};
+
+
+</script>
+</body>
+</html>
