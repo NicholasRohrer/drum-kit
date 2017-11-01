@@ -23,7 +23,7 @@
 var record = document.getElementById("record");
 var stop = document.getElementById("stop");
 var play = document.getElementById("play");
-var erase = document.getElementById("delete");
+var erase = document.getElementById("erase");
 
 // initial global variables
 var shouldRecord;
@@ -249,6 +249,10 @@ play.addEventListener("click", function() {
 	playRecording();
 });
 
+erase.addEventListener("click", function() {
+	deleteRecording();
+});
+
 function playRecording() {
 	var offset = 0;
 	var index = 0;
@@ -264,6 +268,12 @@ function playRecording() {
 		offset += recordTimes[index][element];
 		index++;
 	});	
+}
+
+function deleteRecording() {
+	recordArray = [];
+	recordTimes = {};
+	count = 0;
 }	
 
 </script>
