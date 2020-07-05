@@ -1,8 +1,6 @@
-# tie-bar-project
-
 Description: 
 
-Drum / audio beat application inspired by https://patatap.com/. Uses paper.js for animations and howler.js for audio functionality.
+Drum / audio beat application. Use you keyboard to create beats and even record melodies to loop over. 
 
 Instructions:
 
