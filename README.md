@@ -1,6 +1,5 @@
-Description: 
-
-Drum / audio beat application. Use you keyboard to create beats and even record melodies to loop over. 
+# drum-kit
+Drum / audio beat application. Use you keyboard to create beats and even record melodies to loop over.
 
 Instructions:
 
